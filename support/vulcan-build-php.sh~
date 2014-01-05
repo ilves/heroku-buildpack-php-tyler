@@ -66,8 +66,7 @@ echo "+ Configuring PHP..."
 --with-pdo-pgsql \
 --with-png-dir \
 --with-freetype-dir=/app/local \
---with-zlib \
---enable-opcache=no
+--with-zlib
 
 echo "+ Compiling PHP..."
 # build & install it
