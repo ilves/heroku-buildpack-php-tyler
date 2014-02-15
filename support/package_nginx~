@@ -28,9 +28,13 @@ pushd nginx-$NGINX_VERSION/contrib
 curl -L https://github.com/masterzen/nginx-upload-progress-module/tarball/v0.9.0 -o - | tar zx
 popd
 
+# download and extract Nginx Upload Module into contrib directory
+pushd nginx-$NGINX_VERSION/contrib
+curl -L http://www.grid.net.ru/nginx/download/nginx_upload_module-2.2.0.tar.gz -o - | tar zx
+popd
 
 # build and package nginx for heroku
-vulcan build -v -s nginx-$NGINX_VERSION -o $tempdir/nginx-$NGINX_VERSION-heroku.tar.gz -p /app/vendor/nginx -c './configure --prefix=/app/vendor/nginx --with-pcre=contrib/pcre-8.34 --with-http_ssl_module --with-http_gzip_static_module --with-http_stub_status_module --add-module=contrib/ && make install' 
+vulcan build -v -s nginx-$NGINX_VERSION -o $tempdir/nginx-$NGINX_VERSION-heroku.tar.gz -p /app/vendor/nginx -c './configure --prefix=/app/vendor/nginx --with-pcre=contrib/pcre-8.34 --with-http_ssl_module --with-http_gzip_static_module --with-http_stub_status_module --add-module=contrib/nginx_upload_module-2.2.0 --add-module=contrib/masterzen-nginx-upload-progress-module-a788dea && make install' 
 
 popd
 
