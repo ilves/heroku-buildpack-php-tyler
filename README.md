@@ -121,12 +121,12 @@ Export your new relic license key as the `NEW_RELIC_LICENSE_KEY` env variable us
 ### Deploying
 To use this buildpack, on a new Heroku app:
 ````
-heroku create -s cedar -b git://github.com/iphoting/heroku-buildpack-php-tyler.git
+heroku create -s cedar -b git://github.com/ilves/heroku-buildpack-php-tyler.git
 ````
 
 On an existing app:
 ````
-heroku config:add BUILDPACK_URL=git://github.com/iphoting/heroku-buildpack-php-tyler.git
+heroku config:add BUILDPACK_URL=git://github.com/ilves/heroku-buildpack-php-tyler.git
 ````
 
 Push deploy your app and you should see Nginx, mcrypt, and PHP being bundled.
