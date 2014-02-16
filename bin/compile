@@ -248,8 +248,6 @@ if [ -d /app/conf ]; then
 
 fi
 
-echo "step 2"
-
 # Set correct port variable.
 erb /app/vendor/nginx/conf/nginx.conf.erb > /app/vendor/nginx/conf/nginx.conf
 
@@ -264,8 +262,6 @@ if [ -d /app/conf/nginx.d ]; then
 	done
 fi
 
-echo "step 3"
-
 # Preserve current php-fpm.conf so that env list does
 # not go out of hand across restarts.
 if [ -r /app/vendor/php/etc/php-fpm.conf.current ]; then
@@ -274,14 +270,10 @@ else
 	cp -f /app/vendor/php/etc/php-fpm.conf /app/vendor/php/etc/php-fpm.conf.current
 fi
 
-echo "step 4"
-
 # Expose Heroku config vars to PHP-FPM processes
 for var in \`env | cut -f1 -d=\`; do
 	echo "env[\$var] = \\$\${var}" >> /app/vendor/php/etc/php-fpm.conf
 done
-
-echo "step 5"
 
 touch /app/vendor/nginx/logs/access.log 
 touch /app/vendor/nginx/logs/error.log 
@@ -290,23 +282,15 @@ touch /app/vendor/php/var/log/php-errors.log
 touch /app/local/var/log/newrelic/newrelic-daemon.log 
 touch /app/local/var/log/newrelic/php_agent.log
 
-echo "step 6"
-
 mkdir -p client_body_temp fastcgi_temp proxy_temp scgi_temp uwsgi_temp
-
-echo "step 7"
 
 tail -f -n 0 /app/vendor/nginx/logs/*.log & 
 tail -f -n 0 /app/vendor/php/var/log/*.log &
 tail -f -n 0 /app/local/var/log/newrelic/*.log &
 
-echo "step 8"
-echo "step 9"
-
 /app/vendor/php/sbin/php-fpm
 /app/vendor/nginx/sbin/nginx
 
-echo "step 10"
 EOF
 chmod +x boot.sh
 

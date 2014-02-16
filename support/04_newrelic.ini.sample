@@ -1,8 +1,12 @@
 ; Edit and place this file in your deployment as conf/etc.d/04_newrelic.ini
 extension=newrelic.so
-
-newrelic.appname = PHP Application
+newrelic.appname = "APP NAME"
 newrelic.enabled = 1
-newrelic.logfile = /app/local/var/log/newrelic/php_agent.log
-newrelic.loglevel = none
+newrelic.logfile = "/app/local/var/log/newrelic/php_agent.log"
+newrelic.daemon.location = "/app/local/bin/newrelic-daemon"
+newrelic.daemon.logfile = "/app/local/var/log/newrelic/newrelic-daemon.log"
+newrelic.daemong.loglevel = "verbosedebug"
+newrelic.loglevel = "info"
 newrelic.browser_monitoring.auto_instrument = 1
+newrelic.framework = ""
+newrelic.license = ""

@@ -3,7 +3,7 @@ Nginx+PHP-FPM build pack
 
 This is a build pack bundling PHP and Nginx for Heroku apps.
 
-- Includes additional extensions: apc, memcache, memcached, mysql, pgsql, phpredis, mcrypt, newrelic, and sqlite.
+- Includes additional extensions: memcache, memcached, mysql, pgsql, phpredis, mcrypt, newrelic, sqlite and OpCache
 - Dependency management handled by [Composer][ch].
 - [PHP Info][phpinfo].
 
@@ -114,9 +114,8 @@ Usage
 Read through this whole README file first and decide if you need to make any changes to this buildpack; most customisations do not require editing the buildpack scripts. However, if you do need to make changes, fork this repo and replace the following URLs with yours.
 
 ### Enabling New Relic
-Copy `support/04_newrelic.ini.sample` to your heroku app as `conf/etc.d/04_newrelic.ini`, and edit as necessary.
-
-Export your new relic license key as the `NEW_RELIC_LICENSE_KEY` env variable using `heroku config`. This is already done for you if you have the New Relic add on enabled.
+Copy `support/04_newrelic.ini.sample` to your heroku app as `conf/etc.d/04_newrelic.ini`, and edit it.
+You must add license key!
 
 ### Deploying
 To use this buildpack, on a new Heroku app:
