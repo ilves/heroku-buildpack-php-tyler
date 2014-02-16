@@ -7,7 +7,7 @@ export S3_BUCKET="heroku-buildpack-php-tyler"
 export LIBMCRYPT_VERSION="2.5.9"
 export LIFREETYPE_VERSION="2.4.12"
 export PHP_VERSION="5.4.17"
-export APC_VERSION="3.1.10"
+export APC_VERSION="3.1.13"
 export PHPREDIS_VERSION="2.2.2"
 export LIBMEMCACHED_VERSION="1.0.7"
 export MEMCACHED_VERSION="2.0.1"
@@ -94,6 +94,7 @@ echo "+ Configuring PHP..."
 --enable-pcntl \
 --enable-soap=shared \
 --enable-zip \
+--enable-opcache \
 --with-bz2 \
 --with-curl \
 --with-gd \
@@ -124,17 +125,6 @@ export PATH=/app/vendor/php/bin:$PATH
 
 # configure pear
 pear config-set php_dir /app/vendor/php
-
-echo "+ Installing APC..."
-# install apc from source
-curl -L http://pecl.php.net/get/APC-${APC_VERSION}.tgz -o - | tar xz
-pushd APC-${APC_VERSION}
-# php apc jokers didn't update the version string in 3.1.10.
-sed -i 's/PHP_APC_VERSION "3.1.9"/PHP_APC_VERSION "3.1.10"/g' php_apc.h
-phpize
-./configure --enable-apc --enable-apc-filehits --with-php-config=/app/vendor/php/bin/php-config
-make && make install
-popd
 
 echo "+ Installing memcache..."
 # install memcache

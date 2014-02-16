@@ -8,9 +8,18 @@ source ./set-env.sh
 set -e
 set -o pipefail
 
+mkdir /app/local
+mkdir /app/local/lib
+mkdir /app/local/bin
+mkdir /app/local/include
+mkdir /app/apache
+mkdir /app/vendor/php
+mkdir /app/vendor/php/zlib
+
 orig_dir=$( pwd )
 
 mkdir -p build && pushd build
+
 
 echo "+ Fetching libmcrypt libraries..."
 # install mcrypt for portability.
@@ -29,9 +38,22 @@ echo "+ Fetching PHP sources..."
 #fetch php, extract
 curl -L http://us.php.net/get/php-$PHP_VERSION.tar.bz2/from/www.php.net/mirror -o - | tar xj
 
-pushd php-$PHP_VERSION
+echo "download zlib"
+curl -L http://zlib.net/zlib-1.2.8.tar.gz -o zlib-1.2.8.tar.gz
+tar xzf zlib-1.2.8.tar.gz
+
+pushd zlib-1.2.8
+
+./configure --prefix=/app/vendor/php/zlib
+make && make install
+
+popd
 
 echo "+ Configuring PHP..."
+
+pushd php-$PHP_VERSION
+
+
 # new configure command
 ## WARNING: libmcrypt needs to be installed.
 ./configure \
@@ -39,16 +61,18 @@ echo "+ Configuring PHP..."
 --with-config-file-path=/app/vendor/php \
 --with-config-file-scan-dir=/app/vendor/php/etc.d \
 --disable-debug \
---disable-rpath \
+--enable-shmop \
 --enable-fpm \
 --enable-gd-native-ttf \
 --enable-inline-optimization \
 --enable-libxml \
+--enable-opcache
 --enable-mbregex \
 --enable-mbstring \
 --enable-pcntl \
 --enable-soap=shared \
 --enable-zip \
+--with-zlib=/app/vendor/php/zlib \
 --with-bz2 \
 --with-curl \
 --with-gd \
@@ -65,8 +89,7 @@ echo "+ Configuring PHP..."
 --with-pgsql \
 --with-pdo-pgsql \
 --with-png-dir \
---with-freetype-dir=/app/local \
---with-zlib
+--with-freetype-dir=/app/local
 
 echo "+ Compiling PHP..."
 # build & install it
@@ -80,16 +103,6 @@ export PATH=/app/vendor/php/bin:$PATH
 # configure pear
 pear config-set php_dir /app/vendor/php
 
-echo "+ Installing APC..."
-# install apc from source
-curl -L http://pecl.php.net/get/APC-${APC_VERSION}.tgz -o - | tar xz
-pushd APC-${APC_VERSION}
-# php apc jokers didn't update the version string in 3.1.10.
-#sed -i 's/PHP_APC_VERSION "3.1.9"/PHP_APC_VERSION "3.1.10"/g' php_apc.h
-phpize
-./configure --enable-apc --enable-apc-filehits --with-php-config=/app/vendor/php/bin/php-config
-make && make install
-popd
 
 echo "+ Installing memcache..."
 # install memcache

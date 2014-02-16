@@ -202,7 +202,7 @@ then
 
 	# do the deed!
 	echo "Running: php composer.phar install" | indent
-	LD_LIBRARY_PATH="${BUILD_DIR}/local/lib" ${BUILD_DIR}/vendor/php/bin/php composer.phar install -n | indent
+	LD_LIBRARY_PATH="${BUILD_DIR}/local/lib" ${BUILD_DIR}/vendor/php/bin/php composer.phar install -n --no-dev | indent
 
 	export GIT_DIR=${GIT_DIR_ORIG}
 fi
@@ -284,9 +284,9 @@ touch /app/vendor/nginx/logs/access.log /app/vendor/nginx/logs/error.log /app/ve
 mkdir -p client_body_temp fastcgi_temp proxy_temp scgi_temp uwsgi_temp
 (tail -f -n 0 /app/vendor/nginx/logs/*.log /app/vendor/php/var/log/*.log /app/local/var/log/newrelic/*.log &)
 
-if [ "\${NEW_RELIC_LICENSE_KEY}" ]; then
-	/app/local/bin/newrelic-daemon -c /app/local/etc/newrelic.cfg -d error
-fi
+
+/app/local/bin/newrelic-daemon -c /app/local/etc/newrelic.cfg -d error
+
 /app/vendor/php/sbin/php-fpm
 /app/vendor/nginx/sbin/nginx
 EOF
