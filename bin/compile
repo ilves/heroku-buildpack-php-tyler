@@ -301,9 +301,6 @@ tail -f -n 0 /app/vendor/php/var/log/*.log &
 tail -f -n 0 /app/local/var/log/newrelic/*.log &
 
 echo "step 8"
-
-/app/local/bin/newrelic-daemon -c /app/local/etc/newrelic.cfg -d error
-
 echo "step 9"
 
 /app/vendor/php/sbin/php-fpm

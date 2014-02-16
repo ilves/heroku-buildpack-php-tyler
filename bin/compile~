@@ -308,6 +308,8 @@ echo "step 9"
 
 /app/vendor/php/sbin/php-fpm
 /app/vendor/nginx/sbin/nginx
+
+echo "step 10"
 EOF
 chmod +x boot.sh
 
