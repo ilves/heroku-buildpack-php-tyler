@@ -262,10 +262,6 @@ if [ -d /app/conf/nginx.d ]; then
 	done
 fi
 
-# Set NEWRELIC key
-if [ -x "/app/local/bin/newrelic-license" ]; then
-	/app/local/bin/newrelic-license
-fi
 
 # Preserve current php-fpm.conf so that env list does
 # not go out of hand across restarts.
@@ -281,9 +277,10 @@ for var in \`env | cut -f1 -d=\`; do
 done
 
 touch /app/vendor/nginx/logs/access.log /app/vendor/nginx/logs/error.log /app/vendor/php/var/log/php-fpm.log /app/vendor/php/var/log/php-errors.log /app/local/var/log/newrelic/newrelic-daemon.log /app/local/var/log/newrelic/php_agent.log
-mkdir -p client_body_temp fastcgi_temp proxy_temp scgi_temp uwsgi_temp
-(tail -f -n 0 /app/vendor/nginx/logs/*.log /app/vendor/php/var/log/*.log /app/local/var/log/newrelic/*.log &)
 
+mkdir -p client_body_temp fastcgi_temp proxy_temp scgi_temp uwsgi_temp
+
+(tail -f -n 0 /app/vendor/nginx/logs/*.log /app/vendor/php/var/log/*.log /app/local/var/log/newrelic/*.log &)
 
 /app/local/bin/newrelic-daemon -c /app/local/etc/newrelic.cfg -d error
 
